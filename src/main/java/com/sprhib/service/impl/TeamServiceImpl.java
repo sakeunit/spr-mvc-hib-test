@@ -45,4 +45,9 @@ public class TeamServiceImpl implements TeamService {
 		return teamDAO.getTeams();
 	}
 
+	@Override
+	public Team getTeam(String name) {
+		return teamDAO.getTeamByName(name);
+	}
+
 }

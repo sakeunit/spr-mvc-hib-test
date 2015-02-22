@@ -24,7 +24,7 @@ public class Team {
 	@JoinColumn(name = "organization_id")
 	private Organization organization;
 
-	@OneToMany(mappedBy="id", targetEntity=Team.class)
+	@OneToMany(mappedBy = "id", targetEntity = Team.class)
 	private Set<Member> members;
 
 	public Integer getId() {
@@ -74,4 +74,20 @@ public class Team {
 		return s;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj instanceof Team) {
+			Team other = (Team) obj;
+			if (this.id != null && other.getId() != null) {
+				return this.id.equals(other.getId());
+			}
+			if (this.name != null && other.getName() != null) {
+				return this.name.equals(other.getName());
+			}
+		}
+		return super.equals(obj);
+	}
 }

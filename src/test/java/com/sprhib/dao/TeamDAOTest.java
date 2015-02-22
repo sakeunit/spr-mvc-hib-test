@@ -1,88 +1,67 @@
 package com.sprhib.dao;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-
-import java.util.HashSet;
-import java.util.Set;
+import static org.junit.Assert.assertNull;
 
 import org.hibernate.Session;
-import org.junit.Assert;
+import org.hibernate.SessionFactory;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.sprhib.dao.impl.TeamDAOImpl;
+import com.sprhib.init.BaseTestConfig;
+import com.sprhib.init.OrganizationBuilder;
+import com.sprhib.init.TeamBuilder;
 import com.sprhib.model.Organization;
 import com.sprhib.model.Team;
 
-public class TeamDAOTest extends BaseDAOTestConfig {
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
+@ContextConfiguration(classes = BaseTestConfig.class)
+@Transactional
+@TransactionConfiguration(defaultRollback = true)
+public class TeamDAOTest {
+
+	@Autowired
+	private SessionFactory sessionFactory;
+	private TeamDAOImpl nodeDAO;
+
+	@Before
+	public void setup() {
+		nodeDAO = new TeamDAOImpl(sessionFactory);
+	}
 
 	@Test
-	public void testAddTeam() {
+	public void testAddTeamWithOrganization() {
+		Organization organization = new OrganizationBuilder()
+				.withName("organizationname0")
+				.withAddress("organizationaddress0").build();
+
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
-		
-		Organization organization = new Organization();
-		organization.setName("organizationname0");
-		organization.setAddress("organizationaddress0");
 		session.save(organization);
-		
-		Team team = new Team();
-		team.setName("teamname00");
-		team.setRating(50);
-		team.setOrganization(organization);
-		
-		Set<Team> teams = new HashSet<>();
-		teams.add(team);
-		organization.setTeams(teams);
-		
+		session.getTransaction().commit();
+		session.close();
+
+		Team team = new TeamBuilder().withName("teamname00").withRating(9)
+				.withOrganization(organization).build();
+
 		assertNull(team.getId());
-		
-		session.save(team);
-		
-		assertNotNull(team.getId());
-		assertTrue(team.getId() > 0);
-		
-		session.getTransaction().commit();
-		session.close();
-	}
-	
-	@Test
-	public void testOrganizationTeam1() {
-		Session session = sessionFactory.openSession();
+
+		session = sessionFactory.openSession();
 		session.beginTransaction();
-
-		Organization organization = new Organization();
-		organization.setName("organizationname1");
-		organization.setAddress("organizationaddress1");
-
-		Team team1 = new Team();
-		team1.setName("teamname11");
-		team1.setRating(10);
-		team1.setOrganization(organization);
-		
-		Team team2 = new Team();
-		team2.setName("teamname12");
-		team2.setRating(20);
-		team2.setOrganization(organization);
-
-		Set<Team> teams = new HashSet<>();
-		teams.add(team1);
-		teams.add(team2);
-		
-		organization.setTeams(teams);
-		
-		session.save(organization);
-		
-		assertNotNull(organization.getId());
-		Assert.assertEquals(2, organization.getTeams().size());
-		
-		for (Team team : organization.getTeams()) {
-			assertNotNull(team.getId());
-			assertNotNull(team.getName());
-		}
-		
+		nodeDAO.addTeam(team);
 		session.getTransaction().commit();
 		session.close();
+
+		assertTrue(team.getId() > 0);
 	}
-	
+
 }

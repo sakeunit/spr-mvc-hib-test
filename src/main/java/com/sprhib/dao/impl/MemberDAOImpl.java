@@ -15,11 +15,18 @@ public class MemberDAOImpl implements MemberDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory;
+
+	public MemberDAOImpl() {
+	}
+	
+	public MemberDAOImpl(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
 	
 	private Session getCurrentSession() {
 		return sessionFactory.getCurrentSession();
 	}
-	
+
 	@Override
 	public void addMember(Member member) {
 		getCurrentSession().save(member);
@@ -50,6 +57,14 @@ public class MemberDAOImpl implements MemberDAO {
 	@Override
 	public List<Member> getMembers() {
 		return getCurrentSession().createQuery("from Member").list();
+	}
+
+	@Override
+	public Member getMemberByNames(String lastName, String firstName) {
+		return (Member) getCurrentSession()
+				.createQuery("from Member where lastName=:ln and firstName=:fn")
+				.setParameter("ln", lastName).setParameter("fn", firstName)
+				.uniqueResult();
 	}
 
 }

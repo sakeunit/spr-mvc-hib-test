@@ -15,7 +15,7 @@ import com.gargoylesoftware.htmlunit.DefaultCssErrorHandler;
 
 public class SeleniumAppTest {
 
-	private final static String ROOT = "http://localhost:8181";
+	private final static String ROOT = "http://localhost:8080/spr-mvc-hib";
 	private WebDriver browser;
 
 	@Before
@@ -26,12 +26,12 @@ public class SeleniumAppTest {
 
 	@Test
 	public void testAddOrganization() {
-		browser.get(url("/spr-mvc-hib/organization/add"));
+		browser.get(url("/organization/add"));
 		browser.findElement(By.id("name")).sendKeys("Mark Inc");
 		browser.findElement(By.id("telephone")).sendKeys("+1082655");
 		browser.findElement(By.id("address")).sendKeys("Santa Clara, US");
 		browser.findElement(
-				By.xpath("/html/body/div/form/table/tbody/tr[4]/td[1]/input"))
+				By.xpath("/html/body/div/form/div[4]/input"))
 				.submit();
 		assertEquals("Organization was successfully added.", browser
 				.findElement(By.id("message")).getText());
@@ -39,22 +39,12 @@ public class SeleniumAppTest {
 
 	@Test
 	public void testAddEmptyOrganization() {
-		browser.get(url("/spr-mvc-hib/organization/add"));
+		browser.get(url("/organization/add"));
 		browser.findElement(
-				By.xpath("/html/body/div/form/table/tbody/tr[4]/td[1]/input"))
+				By.xpath("/html/body/div/form/div[4]/input"))
 				.submit();
-		assertEquals("Organization cant have empty fields.", browser
+		assertEquals("Organization has errors.", browser
 				.findElement(By.id("message")).getText());
-	}
-
-	@Test
-	public void testTeamPage() {
-		// TODO
-	}
-
-	@Test
-	public void testTeamMemberPage() {
-		// TODO
 	}
 
 	@After

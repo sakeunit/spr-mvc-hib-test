@@ -42,4 +42,9 @@ public class MemberServiceImpl implements TeamMemberService {
 		return memberDAO.getMembers();
 	}
 
+	@Override
+	public Member getMember(String lastName, String firstName) {
+		return memberDAO.getMemberByNames(lastName, firstName);
+	}
+
 }

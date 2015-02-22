@@ -60,4 +60,21 @@ public class Member {
 	public void setTeams(Set<Team> teams) {
 		this.teams = teams;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj instanceof Member) {
+			Member other = (Member) obj;
+			if (this.id != null && other.getId() != null) {
+				return this.id.equals(other.getId());
+			}
+			String nameLabel = lastName + "-" + firstName;
+			String otherNameLabel = other.lastName + "-" + other.firstName;
+			return nameLabel.equals(otherNameLabel);
+		}
+		return super.equals(obj);
+	}
 }

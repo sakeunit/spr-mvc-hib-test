@@ -34,7 +34,7 @@ public class OrganizationController {
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Organization.class,
 				new OrganizationEditorSupport(organizationService));
-		binder.addValidators(new OrganizationValidator());
+		binder.setValidator(new OrganizationValidator(organizationService));
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
@@ -49,23 +49,19 @@ public class OrganizationController {
 			@Validated @ModelAttribute Organization organization,
 			BindingResult result) {
 
-		String message = null;
-		if (result.hasErrors()) {
-			message = "Organization cant have empty fields.";
-			logger.warn("errors in binding {}." + result);
-		} else {
-			Organization orgInDb = organizationService
-					.getOrganization(organization.getName());
-			if (orgInDb == null) {
-				organizationService.addOrganization(organization);
-				message = "Organization was successfully added.";
-			} else {
-				message = "Organization exists!";
-			}
-		}
-
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("home");
+
+		String message = null;
+		if (result.hasErrors()) {
+			message = "Organization has errors.";
+			modelAndView.addObject("error", result.getAllErrors());
+			logger.warn("errors in binding {}." + result);
+		} else {
+			organizationService.addOrganization(organization);
+			message = "Organization was successfully added.";
+		}
+
 		modelAndView.addObject("message", message);
 		return modelAndView;
 	}

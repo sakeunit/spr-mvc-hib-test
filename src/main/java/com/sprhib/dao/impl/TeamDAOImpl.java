@@ -12,10 +12,17 @@ import com.sprhib.model.Team;
 
 @Repository
 public class TeamDAOImpl implements TeamDAO {
-	
+
 	@Autowired
 	private SessionFactory sessionFactory;
+
+	public TeamDAOImpl() {
+	}
 	
+	public TeamDAOImpl(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
 	private Session getCurrentSession() {
 		return sessionFactory.getCurrentSession();
 	}
@@ -46,6 +53,13 @@ public class TeamDAOImpl implements TeamDAO {
 	@Override
 	public List<Team> getTeams() {
 		return getCurrentSession().createQuery("from Team").list();
+	}
+
+	@Override
+	public Team getTeamByName(String name) {
+		return (Team) getCurrentSession()
+				.createQuery("from Team where name=:n").setParameter("n", name)
+				.uniqueResult();
 	}
 
 }

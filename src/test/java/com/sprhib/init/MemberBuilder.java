@@ -1,5 +1,6 @@
 package com.sprhib.init;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.sprhib.model.Member;
@@ -9,7 +10,7 @@ public class MemberBuilder {
 
 	private String firstName;
 	private String lastName;
-	private Set<Team> teams;
+	private Set<Team> teams = new HashSet<>();
 
 	public Member build() {
 		Member member = new Member();
@@ -26,6 +27,11 @@ public class MemberBuilder {
 
 	public MemberBuilder withLastName(String lastName) {
 		this.lastName = lastName;
+		return this;
+	}
+
+	public MemberBuilder withTeam(Team team) {
+		teams.add(team);
 		return this;
 	}
 

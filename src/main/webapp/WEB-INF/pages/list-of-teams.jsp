@@ -26,12 +26,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="${pageContext.request.contextPath}/index.html">Home</a>
+          <a class="navbar-brand"  href="${pageContext.request.contextPath}/index.html"><spring:message code="page.home.title"/></a>
           <div class="navbar-brand">
-            <span style="float: right">
-              <a href="?lang=en_US">us</a>
-              <a href="?lang=en_UK">uk</a>
-            </span>
+            <div class="btn-group btn-group-xs" role="group" aria-label="...">
+              <a class="btn btn-xs btn-default" href="?lang=en_US"><spring:message code="page.home.lang.us"/></a>
+              <a class="btn btn-xs btn-default" href="?lang=en_UK"><spring:message code="page.home.lang.uk"/></a>
+            </div>
           </div>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -39,26 +39,26 @@
           <%-- organizations --%>
           <ul class="nav navbar-nav">
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Organizations<span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><spring:message code="page.organization.home"/><span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="${pageContext.request.contextPath}/organization/add">Add</a></li>
-                <li><a href="${pageContext.request.contextPath}/organization/list">List</a></li>
+                <li><a href="${pageContext.request.contextPath}/organization/add"><spring:message code="page.common.add"/></a></li>
+                <li><a href="${pageContext.request.contextPath}/organization/list"><spring:message code="page.common.list"/></a></li>
               </ul>
             </li>
             <%-- teams --%>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Teams<span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><spring:message code="page.team.home"/><span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="${pageContext.request.contextPath}/team/add">Add</a></li>
-                <li><a href="${pageContext.request.contextPath}/team/list">List</a></li>
+                <li><a href="${pageContext.request.contextPath}/team/add"><spring:message code="page.common.add"/></a></li>
+                <li><a href="${pageContext.request.contextPath}/team/list"><spring:message code="page.common.list"/></a></li>
               </ul>
             </li>
             <%-- team members --%>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Members<span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><spring:message code="page.teammember.home"/><span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="${pageContext.request.contextPath}/teammember/add">Add</a></li>
-                <li><a href="${pageContext.request.contextPath}/teammember/list">List</a></li>
+                <li><a href="${pageContext.request.contextPath}/teammember/add"><spring:message code="page.common.add"/></a></li>
+                <li><a href="${pageContext.request.contextPath}/teammember/list"><spring:message code="page.common.list"/></a></li>
               </ul>
             </li>
           </ul>
@@ -67,24 +67,35 @@
     </nav>
 
     <!-- old -->
-    <h1>List of teams</h1>
-    <p>Here you can see the list of the teams, edit them, remove or update.</p>
-    <table border="1px" cellpadding="0" cellspacing="0" >
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h1 class="panel-title"><spring:message code="page.team.list.title"/></h1>
+      </div>
+      <div class="panel-body">
+        <p><spring:message code="page.team.list.description"/></p>
+      </div>
+    </div>
+
+    <table class="table table-bordered table-hover">
     <thead>
     <tr>
-    <th width="10%">id</th><th width="15%">Name</th><th width="10%">Rating</th><th width="10%">Organization</th><th width="10%">Actions</th>
+      <th width="5%"><spring:message code="label.id"/></th>
+      <th width="50%"><spring:message code="label.name"/></th>
+      <th width="10%"><spring:message code="label.rating"/></th>
+      <th width="25%"><spring:message code="label.organization"/></th>
+      <th width="10%"><spring:message code="label.actions"/></th>
     </tr>
     </thead>
     <tbody>
     <c:forEach var="team" items="${teams}">
     <tr>
-    	<td>${team.id}</td>
+    	<td><span class="label label-info">${team.id}</span></td>
     	<td>${team.name}</td>
     	<td>${team.rating}</td>
     	<td>${team.organization}</td>
     	<td>
-    	<a href="${pageContext.request.contextPath}/team/edit/${team.id}.html">Edit</a><br/>
-    	<a href="${pageContext.request.contextPath}/team/delete/${team.id}.html">Delete</a><br/>
+        <a class="btn btn-default btn-xs" href="${pageContext.request.contextPath}/team/edit/${team.id}.html"><spring:message code="page.common.edit"/></a><br/>
+        <a class="btn btn-default btn-xs" href="${pageContext.request.contextPath}/team/delete/${team.id}.html"><spring:message code="page.common.delete"/></a><br/>
     	</td>
     </tr>
     </c:forEach>

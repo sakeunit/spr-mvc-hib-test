@@ -18,8 +18,8 @@ public class OrganizationServiceImpl implements OrganizationService {
 	private OrganizationDAO organizationDAO;
 
 	@Override
-	public void addOrganization(Organization organization) {
-		organizationDAO.addOrganization(organization);
+	public Integer addOrganization(Organization organization) {
+		return organizationDAO.addOrganization(organization);
 	}
 
 	@Override

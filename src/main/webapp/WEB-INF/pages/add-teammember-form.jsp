@@ -27,12 +27,12 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="${pageContext.request.contextPath}/index.html">Home</a>
+            <a class="navbar-brand"  href="${pageContext.request.contextPath}/index.html"><spring:message code="page.home.title"/></a>
             <div class="navbar-brand">
-              <span style="float: right">
-                <a href="?lang=en_US">us</a>
-                <a href="?lang=en_UK">uk</a>
-              </span>
+              <div class="btn-group btn-group-xs" role="group" aria-label="...">
+                <a class="btn btn-xs btn-default" href="?lang=en_US"><spring:message code="page.home.lang.us"/></a>
+                <a class="btn btn-xs btn-default" href="?lang=en_UK"><spring:message code="page.home.lang.uk"/></a>
+              </div>
             </div>
           </div>
           <!-- Collect the nav links, forms, and other content for toggling -->
@@ -40,26 +40,26 @@
             <%-- organizations --%>
             <ul class="nav navbar-nav">
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Organizations<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><spring:message code="page.organization.home"/><span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="${pageContext.request.contextPath}/organization/add">Add</a></li>
-                  <li><a href="${pageContext.request.contextPath}/organization/list">List</a></li>
+                  <li><a href="${pageContext.request.contextPath}/organization/add"><spring:message code="page.common.add"/></a></li>
+                  <li><a href="${pageContext.request.contextPath}/organization/list"><spring:message code="page.common.list"/></a></li>
                 </ul>
               </li>
               <%-- teams --%>
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Teams<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><spring:message code="page.team.home"/><span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="${pageContext.request.contextPath}/team/add">Add</a></li>
-                  <li><a href="${pageContext.request.contextPath}/team/list">List</a></li>
+                  <li><a href="${pageContext.request.contextPath}/team/add"><spring:message code="page.common.add"/></a></li>
+                  <li><a href="${pageContext.request.contextPath}/team/list"><spring:message code="page.common.list"/></a></li>
                 </ul>
               </li>
               <%-- team members --%>
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Members<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><spring:message code="page.teammember.home"/><span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="${pageContext.request.contextPath}/teammember/add">Add</a></li>
-                  <li><a href="${pageContext.request.contextPath}/teammember/list">List</a></li>
+                  <li><a href="${pageContext.request.contextPath}/teammember/add"><spring:message code="page.common.add"/></a></li>
+                  <li><a href="${pageContext.request.contextPath}/teammember/list"><spring:message code="page.common.list"/></a></li>
                 </ul>
               </li>
             </ul>
@@ -68,33 +68,49 @@
       </nav>
 
       <%-- old   --%>
-      <h1>Add team member page</h1>
-      <p>Here you can add a new team member.</p>
-      <form:form method="POST" commandName="teammember" action="${pageContext.request.contextPath}/teammember/add.html">
-        <table>
-          <tbody>
-            <tr>
-              <td>First Name:</td>
-              <td><form:input path="firstName" /></td>
-            </tr>
-            <tr>
-              <td>Last Name:</td>
-              <td><form:input path="lastName" /></td>
-            </tr>
-            <tr>
-              <td>Teams:</td>
-              <td>
-                <form:select path="teams" id="teams" multiple="true">
-                  <form:options items="${teams}" itemValue="id" itemLabel="name"/>
-                </form:select>
-              </td>
-            </tr>
-            <tr>
-              <td><input type="submit" value="Add" /></td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h1 class="panel-title"><spring:message code="page.teammember.add.title"/></h1>
+        </div>
+        <div class="panel-body">
+          <p><spring:message code="page.teammember.add.description"/></p>
+        </div>
+      </div>
+
+      <div id="message">
+        ${message}
+      </div>
+
+      <form:form class="form-horizontal col-md-12" method="POST" commandName="teammember" action="${pageContext.request.contextPath}/teammember/add.html">
+        <div class="row form-group form-group-md">
+          <label class="col-md-4 control-label"><spring:message code="label.firstName"/></label>
+          <div class="col-md-8">
+            <form:input class="form-control" path="firstName" />
+            <form:errors path="firstName" cssClass="errors"/>
+          </div>
+        </div>
+
+        <div class="row form-group form-group-md">
+          <label class="col-md-4 control-label"><spring:message code="label.lastName"/></label>
+          <div class="col-md-8">
+            <form:input class="form-control" path="lastName" />
+            <form:errors path="lastName" cssClass="errors"/>
+          </div>
+        </div>
+
+        <div class="row form-group form-group-md">
+          <label class="col-md-4 control-label"><spring:message code="label.teams"/></label>
+          <div class="col-md-8">
+            <form:select class="form-control" path="teams" id="teams" multiple="true">
+              <form:options items="${teams}" itemValue="id" itemLabel="name"/>
+            </form:select>
+          </div>
+        </div>
+
+        <div class="form-group col-md-6 col-md-offset-6">
+            <spring:message code="label.submit" var="labelSubmit"/>
+            <input type="submit" class="btn btn-default" value=${labelSubmit} />
+        </div>
       </form:form>
     </div>
 

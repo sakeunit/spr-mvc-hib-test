@@ -1,21 +1,21 @@
 package com.sprhib.controller;
 
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -69,13 +69,12 @@ public class TeamMemberControllerTest {
 	}
 
 	@Test
-	public void testAddOrganizationEmptyDoesNotProceed() throws Exception {
-		Member memberToAdd = new Member();
-
+	public void testAddTeamMemberEmptyDoesNotProceed() throws Exception {
 		mockMvc.perform(
-				post("/teammember/add").sessionAttr("teammember", memberToAdd))
+				post("/teammember/add").sessionAttr("teammember", new Member()))
 				.andExpect(status().isOk())
 				.andExpect(forwardedUrl("home"))
+				.andExpect(model().hasErrors())
 				.andExpect(
 						model().attribute("teammember",
 								hasProperty("firstName", nullValue())))
@@ -86,33 +85,33 @@ public class TeamMemberControllerTest {
 	}
 
 	@Test
-	public void testAddOrganizationWithValidParameters() throws Exception {
+	public void testAddTeamMemberWithValidParameters() throws Exception {
+		Team team1 = new TeamBuilder().withName("Team Name Test 1").withId(1)
+				.build();
+		Team team2 = new TeamBuilder().withName("Team Name Test 2").withId(2)
+				.build();
+
+		when(teamService.getTeam(1)).thenReturn(team1);
+		when(teamService.getTeam(2)).thenReturn(team2);
+
 		Member memberToAdd = new MemberBuilder()
 				.withFirstName("First Name Test")
-				.withLastName("Last Name Test").build();
-
-		Team team = new TeamBuilder().withName("Team Name Test").build();
-		List<Team> teamsToChoose = Arrays.asList(team);
+				.withLastName("Last Name Test").withTeam(team1).build();
 
 		mockMvc.perform(
 				post("/teammember/add").param("firstName", "First Name Test")
 						.param("lastName", "Last Name Test")
-						.param("team", "Team Name Test")
-						.sessionAttr("teammember", memberToAdd)
-						.sessionAttr("teams", teamsToChoose))
+						.param("teams", "1").param("teams", "2")
+						.sessionAttr("teammember", new Member())
+						.sessionAttr("teams", Arrays.asList(team1, team2)))
 				.andExpect(status().isOk())
-				.andDo(print())
 				.andExpect(forwardedUrl("home"))
-				.andExpect(
-						model().attribute("teammember",
-								hasProperty("firstName", is("First Name Test"))))
-				.andExpect(
-						model().attribute("teammember",
-								hasProperty("lastName", is("Last Name Test"))))
-				.andExpect(
-						model().attribute("teammember",
-								hasProperty("teams", is(teamsToChoose))));
-		
+				.andExpect(model().hasNoErrors())
+				.andExpect(model().attribute("teammember", hasProperty("firstName", is("First Name Test"))))
+				.andExpect(model().attribute("teammember", hasProperty("lastName", is("Last Name Test"))))
+				.andExpect(model().attribute("teammember", hasProperty("teams", hasItem(team1))))
+				.andExpect(model().attribute("teammember", hasProperty("teams", hasItem(team2))));
+
 		verify(teamMemberService, times(1)).addMember(memberToAdd);
 	}
 }

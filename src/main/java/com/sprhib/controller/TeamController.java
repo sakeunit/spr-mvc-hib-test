@@ -41,7 +41,7 @@ public class TeamController {
 				teamService));
 		binder.registerCustomEditor(Organization.class,
 				new OrganizationEditorSupport(organizationService));
-		binder.addValidators(new TeamValidator());
+		binder.addValidators(new TeamValidator(teamService));
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
@@ -58,16 +58,15 @@ public class TeamController {
 			@Validated @ModelAttribute("team") Team team, BindingResult result,
 			Model model) {
 		ModelAndView modelAndView = new ModelAndView("home");
+		String message = null;
 		if (result.hasErrors()) {
-			logger.warn("result: " + result);
-			modelAndView.addObject("message",
-					"Team does not contain valid fields.");
-			return modelAndView;
+			message = "Team does not contain valid fields.";
+		} else {
+			logger.info("addingTeam team: " + team);
+			message = "Team was successfully added.";
+			teamService.addTeam(team);
 		}
-		logger.info("addingTeam team: " + team);
-		teamService.addTeam(team);
-
-		modelAndView.addObject("message", "Team was successfully added.");
+		modelAndView.addObject("message", message);
 		return modelAndView;
 	}
 

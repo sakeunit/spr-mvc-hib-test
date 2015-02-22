@@ -10,21 +10,21 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="organization")
+@Table(name = "organization")
 public class Organization {
-	
+
 	@Id
 	@GeneratedValue
 	private Integer id;
-	
+
 	private String name;
-	
+
 	private String telephone;
-	
+
 	private String address;
-	
-	@OneToMany(mappedBy="organization", cascade=CascadeType.ALL)  
-    private Set<Team> teams;
+
+	@OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
+	private Set<Team> teams;
 
 	public Integer getId() {
 		return id;
@@ -61,9 +61,30 @@ public class Organization {
 	public Set<Team> getTeams() {
 		return teams;
 	}
-	
+
 	public void setTeams(Set<Team> teams) {
 		this.teams = teams;
 	}
 
+	@Override
+	public String toString() {
+		return this.name;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj instanceof Organization) {
+			Organization other = (Organization) obj;
+			if (this.id != null && other.getId() != null) {
+				return this.id.equals(other.getId());
+			}
+			if (this.name != null && other.getName() != null) {
+				return this.name.equals(other.getName());
+			}
+		}
+		return super.equals(obj);
+	}
 }

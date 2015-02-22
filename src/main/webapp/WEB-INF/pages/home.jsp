@@ -25,12 +25,12 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Home</a>
+            <a class="navbar-brand" href="#"><spring:message code="page.home.title"/></a>
             <div class="navbar-brand">
-	            <span style="float: right">
-	    			    <a href="?lang=en_US">us</a>
-	    			    <a href="?lang=en_UK">uk</a>
-				      </span>
+              <div class="btn-group btn-group-xs" role="group" aria-label="...">
+                <a class="btn btn-xs btn-default" href="?lang=en_US"><spring:message code="page.home.lang.us"/></a>
+                <a class="btn btn-xs btn-default" href="?lang=en_UK"><spring:message code="page.home.lang.uk"/></a>
+              </div>
 			      </div>
           </div>
           <!-- Collect the nav links, forms, and other content for toggling -->
@@ -38,26 +38,26 @@
             <%-- organizations --%>
             <ul class="nav navbar-nav">
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Organizations<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><spring:message code="page.organization.home"/><span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="${pageContext.request.contextPath}/organization/add">Add</a></li>
-                  <li><a href="${pageContext.request.contextPath}/organization/list">List</a></li>
+                  <li><a href="${pageContext.request.contextPath}/organization/add"><spring:message code="page.common.add"/></a></li>
+                  <li><a href="${pageContext.request.contextPath}/organization/list"><spring:message code="page.common.list"/></a></li>
                 </ul>
               </li>
               <%-- teams --%>
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Teams<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><spring:message code="page.team.home"/><span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="${pageContext.request.contextPath}/team/add">Add</a></li>
-                  <li><a href="${pageContext.request.contextPath}/team/list">List</a></li>
+                  <li><a href="${pageContext.request.contextPath}/team/add"><spring:message code="page.common.add"/></a></li>
+                  <li><a href="${pageContext.request.contextPath}/team/list"><spring:message code="page.common.list"/></a></li>
                 </ul>
               </li>
               <%-- team members --%>
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Members<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><spring:message code="page.teammember.home"/><span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="${pageContext.request.contextPath}/teammember/add">Add</a></li>
-                  <li><a href="${pageContext.request.contextPath}/teammember/list">List</a></li>
+                  <li><a href="${pageContext.request.contextPath}/teammember/add"><spring:message code="page.common.add"/></a></li>
+                  <li><a href="${pageContext.request.contextPath}/teammember/list"><spring:message code="page.common.list"/></a></li>
                 </ul>
               </li>
             </ul>
@@ -65,10 +65,14 @@
         </div><!-- /.container-fluid -->
       </nav>
 
-      <h1><spring:message code="page.home.title"/></h1>
-      <p><spring:message code="page.home.description"/></p>
+      <div class="jumbotron">
+        <h1><spring:message code="page.home.title"/></h1>
+        <p><spring:message code="page.home.description"/></p>
+      </div>
       <div>
-        <div id="message">${message}</div>
+        <div>
+          <h3 id="message" class="bg-warning">${message}</h3>
+        </div>
         <ul>
           <li><a href="${pageContext.request.contextPath}/organization/add"><spring:message code="page.organization.add.title"/></a>
           <li><a href="${pageContext.request.contextPath}/organization/list"><spring:message code="page.organization.list.title"/></a>

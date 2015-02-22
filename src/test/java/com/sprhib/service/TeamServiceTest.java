@@ -1,52 +1,71 @@
 package com.sprhib.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.any;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import com.sprhib.dao.TeamDAO;
-import com.sprhib.init.BaseTestConfig;
 import com.sprhib.init.OrganizationBuilder;
 import com.sprhib.init.TeamBuilder;
 import com.sprhib.model.Organization;
 import com.sprhib.model.Team;
 import com.sprhib.service.impl.TeamServiceImpl;
 
-@WebAppConfiguration
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = BaseTestConfig.class)
-@Transactional
-@TransactionConfiguration(defaultRollback = true)
 public class TeamServiceTest {
 
-	@Autowired
-	private TeamDAO teamDAO;
-
-	@Autowired
+	@Mock
+	private TeamDAO mockDAO;
+	@InjectMocks
 	private TeamService teamService = new TeamServiceImpl();
 
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+		
+	}
+	
 	@Test
-	public void testAddTeam() {
+	public void testGetTeamById() {
 		Organization organization = new OrganizationBuilder().withName(
 				"organization name").build();
-
-		Team team = new TeamBuilder().withName("teamname").withRating(50)
+		
+		Team team = new TeamBuilder().withName("team name").withRating(9)
 				.withOrganization(organization).build();
-		assertNull(team.getId());
-
-		teamService.addTeam(team);
-
-		assertNotNull(team.getId());
-		assertTrue(team.getId() > 0);
+		
+		when(mockDAO.getTeam(1)).thenReturn(team);
+		
+		Team t = teamService.getTeam(1);
+		verify(mockDAO).getTeam(1);
+		assertEquals("team name", t.getName());
+	}
+	
+	@Test
+	public void testGetTeamByName() {
+		Organization organization = new OrganizationBuilder().withName(
+				"organization name").build();
+		
+		Team team = new TeamBuilder().withName("team name").withRating(9)
+				.withOrganization(organization).build();
+		
+		when(mockDAO.getTeamByName("team name")).thenReturn(team);
+		
+		Team t = teamService.getTeam("team name");
+		verify(mockDAO).getTeamByName("team name");
+		assertEquals("team name", t.getName());
 	}
 
+	@Test
+	public void testListTeams() {
+		//TODO
+	}
 }

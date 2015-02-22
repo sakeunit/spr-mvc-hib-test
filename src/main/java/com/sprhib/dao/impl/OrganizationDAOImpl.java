@@ -1,5 +1,6 @@
 package com.sprhib.dao.impl;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -16,13 +17,20 @@ public class OrganizationDAOImpl implements OrganizationDAO {
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	public OrganizationDAOImpl() {
+	}
+
+	public OrganizationDAOImpl(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
 	private Session getCurrentSession() {
 		return sessionFactory.getCurrentSession();
 	}
 
 	@Override
-	public void addOrganization(Organization organization) {
-		getCurrentSession().save(organization);
+	public Integer addOrganization(Organization organization) {
+		return (Integer) getCurrentSession().save(organization);
 	}
 
 	@Override
@@ -59,8 +67,8 @@ public class OrganizationDAOImpl implements OrganizationDAO {
 	@Override
 	public Organization getOrganization(String name) {
 		return (Organization) getCurrentSession()
-				.createQuery("from Organization where name=:n").setParameter("n", name)
-				.uniqueResult();
+				.createQuery("from Organization where name=:n")
+				.setParameter("n", name).uniqueResult();
 	}
 
 }
