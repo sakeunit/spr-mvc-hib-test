@@ -168,6 +168,30 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/frontend/**</exclude>
+						<exclude>**/dao/**</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.18.1</version>
+				<configuration>
+					<includes>
+						<include>com/sprhib/frontend/**</include>
+						<include>com/sprhib/init/BaseTestConfig.java</include>
+						<include>com/sprhib/dao/**Test.java</include>
+					</includes>
+				</configuration>
+
+			</plugin>
 		</plugins>
 	</build>
 
